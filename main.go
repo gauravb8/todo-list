@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/gauravb8/todo-list/app"
+)
 
 func main() {
-	fmt.Println("xyz App!")
+	tdl := app.TodoList{}
+
+	note := app.NewNote("Hello!")
+
+	tdl = append(tdl, note)
+
+	fmt.Printf("%+v", tdl)
 }
