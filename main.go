@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/gauravb8/todo-list/app"
 )
 
@@ -13,5 +11,5 @@ func main() {
 
 	tdl = append(tdl, note)
 
-	fmt.Printf("%+v", tdl)
+	tdl.PrintList()
 }
