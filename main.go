@@ -16,13 +16,19 @@ type AddNoteReq struct {
 var tdl = app.TodoList{}
 
 func hello(w http.ResponseWriter, req *http.Request) {
+	if req.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	fmt.Fprintf(w, "Welcome to todo list!")
 }
 
 func addNote(w http.ResponseWriter, req *http.Request) {
-	c := req.Context()
-
-	fmt.Printf("%s: got /hello request\n", c.Value("keyServerAddr"))
+	if req.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 
 	body, err := ioutil.ReadAll(req.Body)
 
@@ -44,14 +50,20 @@ func addNote(w http.ResponseWriter, req *http.Request) {
 }
 
 func showList(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprint(w, tdl.PrintList())
+	if req.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(tdl.GetListJson())
 }
 
 func main() {
 
 	http.HandleFunc("/", hello)
-	http.HandleFunc("/list/add", addNote)
 	http.HandleFunc("/list", showList)
+	http.HandleFunc("/list/add", addNote)
 
 	http.ListenAndServe(":8090", nil)
 

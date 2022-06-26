@@ -18,6 +18,17 @@ func NewNote(msg string) *Note {
 		createdAt: time.Now(),
 	}
 }
+
+func (td TodoList) GetListJson() map[string]string {
+	m := make(map[string]string)
+	for _, note := range td {
+		m["message"] = note.message
+		m["createdAt"] = note.createdAt.Format("02 Jan, 2006 15:04:05")
+	}
+
+	return m
+}
+
 func (td TodoList) PrintList() string {
 	s := ""
 	for i, note := range td {
