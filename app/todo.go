@@ -19,11 +19,13 @@ func NewNote(msg string) *Note {
 	}
 }
 
-func (td TodoList) GetListJson() map[string]string {
-	m := make(map[string]string)
+func (td TodoList) GetListJson() []map[string]string {
+	var m []map[string]string
 	for _, note := range td {
-		m["message"] = note.message
-		m["createdAt"] = note.createdAt.Format("02 Jan, 2006 15:04:05")
+		temp := make(map[string]string)
+		temp["message"] = note.message
+		temp["createdAt"] = note.createdAt.Format("02 Jan, 2006 15:04:05")
+		m = append(m, temp)
 	}
 
 	return m
