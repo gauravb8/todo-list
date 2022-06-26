@@ -6,35 +6,35 @@ import (
 )
 
 type Note struct {
-	message   string
-	createdAt time.Time
+	Message   string    `json:"message"`
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 type TodoList []*Note
 
 func NewNote(msg string) *Note {
 	return &Note{
-		message:   msg,
-		createdAt: time.Now(),
+		Message:   msg,
+		CreatedAt: time.Now(),
 	}
 }
 
-func (td TodoList) GetListJson() []map[string]string {
-	var m []map[string]string
-	for _, note := range td {
-		temp := make(map[string]string)
-		temp["message"] = note.message
-		temp["createdAt"] = note.createdAt.Format("02 Jan, 2006 15:04:05")
-		m = append(m, temp)
-	}
+// func (td TodoList) GetListJson() []map[string]string {
+// 	var m []map[string]string
+// 	for _, note := range td {
+// 		temp := make(map[string]string)
+// 		temp["message"] = note.Message
+// 		temp["createdAt"] = note.CreatedAt.Format("02 Jan, 2006 15:04:05")
+// 		m = append(m, temp)
+// 	}
 
-	return m
-}
+// 	return m
+// }
 
 func (td TodoList) PrintList() string {
 	s := ""
 	for i, note := range td {
-		s += fmt.Sprintf("%d.\t%s\t%s\n", i+1, note.message, note.createdAt.Format("02 Jan, 2006 15:04:05"))
+		s += fmt.Sprintf("%d.\t%s\t%s\n", i+1, note.Message, note.CreatedAt.Format("02 Jan, 2006 15:04:05"))
 	}
 
 	return s
