@@ -18,8 +18,11 @@ func NewNote(msg string) *Note {
 		createdAt: time.Now(),
 	}
 }
-func (td TodoList) PrintList() {
+func (td TodoList) PrintList() string {
+	s := ""
 	for i, note := range td {
-		fmt.Println(i, note.message, note.createdAt.Format("02 Jan, 2006 15:04:05"))
+		s += fmt.Sprintf("%d.\t%s\t%s\n", i+1, note.message, note.createdAt.Format("02 Jan, 2006 15:04:05"))
 	}
+
+	return s
 }
