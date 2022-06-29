@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gauravb8/todo-list/app"
 )
@@ -13,7 +14,7 @@ type AddNoteReq struct {
 	Message string
 }
 
-var tdl = app.TodoList{}
+var tdl app.TodoList
 
 func hello(w http.ResponseWriter, req *http.Request) {
 	if req.Method != http.MethodGet {
@@ -47,6 +48,14 @@ func addNote(w http.ResponseWriter, req *http.Request) {
 
 	tdl = append(tdl, app.NewNote(postReq.Message))
 
+	err = tdl.SaveList()
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		http.Error(w, "Failed to add note", http.StatusInternalServerError)
+		return
+	}
+
 }
 
 func showList(w http.ResponseWriter, req *http.Request) {
@@ -60,6 +69,13 @@ func showList(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+
+	var err error
+	tdl, err = app.InitTodoList()
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(-1)
+	}
 
 	http.HandleFunc("/", hello)
 	http.HandleFunc("/list", showList)

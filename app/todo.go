@@ -1,8 +1,13 @@
 package app
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"time"
+
+	"github.com/gauravb8/todo-list/constants"
 )
 
 type Note struct {
@@ -17,6 +22,24 @@ func NewNote(msg string) *Note {
 		Message:   msg,
 		CreatedAt: time.Now(),
 	}
+}
+
+func InitTodoList() (TodoList, error) {
+	fp, err := os.OpenFile(constants.NotesFilePath, os.O_RDONLY|os.O_CREATE, 0755)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := ioutil.ReadAll(fp)
+	if err != nil {
+		return nil, err
+	}
+
+	td := TodoList{}
+
+	json.Unmarshal(data, &td)
+
+	return td, nil
 }
 
 // func (td TodoList) GetListJson() []map[string]string {
@@ -38,4 +61,27 @@ func (td TodoList) PrintList() string {
 	}
 
 	return s
+}
+
+func (td TodoList) SaveList() error {
+	fp, err := os.OpenFile(constants.NotesFilePath, os.O_RDWR, 0755)
+	if err != nil {
+		return err
+	}
+
+	defer fp.Close()
+
+	text, err := json.MarshalIndent(td, "", "\t")
+	if err != nil {
+		return err
+	}
+
+	_, err = fp.Write(text)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("New note added successfully")
+
+	return nil
 }

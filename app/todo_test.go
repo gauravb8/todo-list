@@ -12,11 +12,11 @@ func TestNewNote(t *testing.T) {
 
 	n := NewNote(message)
 
-	if n.message != message {
-		t.Errorf("Error. Expected: %s, Received: %s", message, n.message)
+	if n.Message != message {
+		t.Errorf("Error. Expected: %s, Received: %s", message, n.Message)
 	}
 
-	if n.createdAt.Before(now) || n.createdAt.After(time.Now()) {
+	if n.CreatedAt.Before(now) || n.CreatedAt.After(time.Now()) {
 		t.Errorf("Unexpected creation time for note")
 	}
 }
